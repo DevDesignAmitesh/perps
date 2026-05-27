@@ -1,20 +1,14 @@
 {
-  "name": "@repo/redis-client",
+  "name": "engine",
   "module": "index.ts",
   "type": "module",
   "private": true,
   "devDependencies": {
     "@types/bun": "latest",
+    "@repo/redis-client": "*",
     "@repo/common": "*"
   },
   "peerDependencies": {
     "typescript": "^5"
-  },
-  "dependencies": {
-    "@types/redis": "^4.0.11",
-    "redis": "^5.12.1"
-  },
-  "exports": {
-    "./redis-client": "./src/index.ts"
   }
 }

@@ -1,3 +1,5 @@
+import z, { type ZodError } from "zod";
+
 export type MessageType = {
 	name: string;
 	messages: { id: string, message: any }[]
@@ -22,3 +24,19 @@ export const COMMON_STREAM_CONFIGS = {
 }
 
 export const GROUPS = [HTTP_BACKEND_STREAM_CONFIGS, ORDER_ENGINE_STREAM_CONFIGS, COMMON_STREAM_CONFIGS]
+
+export const zodErrorMessage = ({ error }: { error: ZodError }) => {
+  return error.issues.map((er) => `${er.path.join(".")}: ${er.message}`);
+};
+
+export const createOrderSchema = z.object({
+  userId: z.uuid(),
+  orderId: z.uuid(),
+  correlationId: z.uuid(),
+  symbol: z.string().includes("/"),
+  price: z.number().optional(),
+  qty: z.number().optional(),
+  side: z.enum(["BUY", "SELL"]),
+  type: z.enum(["LIMIT", "MARKET"]),
+  way: z.enum(["MANUAL", "EXCHANGE"]),
+});

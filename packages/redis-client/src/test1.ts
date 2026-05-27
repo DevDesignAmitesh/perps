@@ -14,11 +14,11 @@ try {
   );
   
   
+  // TODO: check if we need to add loop in this (maybe not)
   for (const message of res.messages) {
     console.log("message ", message);
     const parsedResponse = JSON.parse(message.message.data ?? "{}")
 
-    // TODO: add types here and handle the shitss
     console.log("parsedResponse", parsedResponse);
 
     await redisManager.acknowledgeMent(
