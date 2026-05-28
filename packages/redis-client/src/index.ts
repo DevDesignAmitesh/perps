@@ -98,7 +98,7 @@ class RedisManager {
       console.log("response_stream before adding", group_stream);
       
       await this.addToStream(response_stream, dataToSend);
-      
+
       const response = await this.getFromStream(group_name, group_consumer, group_stream);
 
       if (response) res(response)

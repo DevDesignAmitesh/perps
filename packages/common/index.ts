@@ -147,10 +147,6 @@ export type RedisDbQueueData =
     };
 
 export type RedisWsQueueData =
-  // | {
-  //     type: "order_book";
-  //     data: OrderBook
-  //   }
   | {
       type: "order_book";
       data: UserBasedOrderBook
@@ -260,9 +256,6 @@ export type Position = {
   isProfit: boolean
 }
 
-// LONG: {
-  //  liquidationPice: userIds (string[])
-// }
 export type POSITIONS_MAPS = Record<postionType, Record<number, string[]>>
 
 export type fillType = "MAKER" | "TAKER";

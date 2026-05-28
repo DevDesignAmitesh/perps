@@ -700,6 +700,8 @@ class EngineStore {
     const position = this.getAllPositions().find((pos) => pos.userId === userId);
     if (!position) return;
 
+    // TODO: send request to the backend for deleting the positions (via queue)
+
     this.POSITIONS = this.POSITIONS.filter((pos) => pos.userId !== userId);
     delete this.POSITIONS_MAPS[position.type][position.liquidationPrice]
   }
@@ -805,7 +807,7 @@ class EngineStore {
 
   beforeOrder = (parsedResponse: RedisQueueData): BeforeOrderResponse => {
     if (parsedResponse.type !== "create_order") return {
-      clientId: parsedResponse.clientId,
+      correlationId: parsedResponse.clientId,
       ok: false,
       type: "ERROR",
     }
@@ -818,7 +820,7 @@ class EngineStore {
       // for limit we need both price and qty (conceptual)
       if (price === undefined || qty === undefined) {
         return {
-          clientId: parsedResponse.clientId,
+          correlationId: parsedResponse.clientId,
           ok: false,
           error: "Price and quantity both should be defined.",
           type: "ERROR",
@@ -828,7 +830,7 @@ class EngineStore {
       // for market any one value is able to find the other one thats why one value should be defined
       if (price === undefined && qty === undefined) {
         return {
-          clientId: parsedResponse.clientId,
+          correlationId: parsedResponse.clientId,
           ok: false,
           error: "Price and quantity both should be defined.",
           type: "ERROR",
@@ -839,7 +841,7 @@ class EngineStore {
     // one time more just for making TS happy.
     if (price === undefined || qty === undefined) {
       return {
-        clientId: parsedResponse.clientId,
+        correlationId: parsedResponse.clientId,
         ok: false,
         error: "Price and quantity both should be defined.",
         type: "ERROR",
@@ -857,7 +859,7 @@ class EngineStore {
 
     if (!isUserHaveBalance) {
       return {
-        clientId: parsedResponse.clientId,
+        correlationId: parsedResponse.clientId,
         ok: false,
         error: "Insufficient balance.",
         type: "ERROR"
@@ -878,7 +880,7 @@ class EngineStore {
       this.resetLockBalalnceOfUser(userId, side, true)
 
       return {
-        clientId: parsedResponse.clientId,
+        correlationId: parsedResponse.clientId,
         ok: false,
         data: {
           message: "available price not found",
@@ -917,7 +919,7 @@ class EngineStore {
       this.pushOrderAndFillToQueue(order, [], []);
       
       return {
-        clientId: parsedResponse.clientId,
+        correlationId: parsedResponse.clientId,
         ok: true,
         data: {
           message: "Order added in the order book",
@@ -934,7 +936,7 @@ class EngineStore {
 
     // returning the avilable qty for the further processing
     return {
-      clientId: parsedResponse.clientId,
+      correlationId: parsedResponse.clientId,
       ok: true,
       data: {
         message: "available price found",
